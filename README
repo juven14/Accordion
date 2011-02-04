@@ -1,0 +1,147 @@
+Accordion, jQuery Plugin
+
+Overview:
+================================================================================
+This plugin enables an accordion with cookie persistance. This plugin is based 
+on my collapsible plugin.
+
+If you find any errors or have suggested changes, please post a comment on the 
+github project: http://github.com/juven14/Accordion
+
+Very Basic demos can be found here: 
+http://www.snyderplace.com/demos/accordion.html
+________________________________________________________________________________
+================================================================================
+
+
+Adding an accordion to your html:
+================================================================================
+
+You have to create your own html for the accordion. You need a header element 
+(here as h3, can be div or etc) that gets the "accordion" class assigned and a 
+body element. However, the slide effect will be choppy if you have margins and 
+padding for the container, so here I just use a div. I've used "accordion" but 
+you can choose any other selector, also i have added classes to aid with styling, 
+and the containers do not have to have these class names. Note that there is a 
+slight jump on some panels due to the way jQuery handles slideUp and slideDown, 
+see the custom javascript panel below for better sliding. Here is an example:
+
+---HTML code--------------------------------------------------------------------
+<h3 class="accordion" id="nav-section1">Navigation Section<span></span><h3>
+<div>
+    <ul>
+    <li><a href="#">Navigation Item</a></li>
+    <li><a href="#">Navigation Item</a></li>
+    <li><a href="#">Navigation Item</a></li>
+    <li><a href="#">Navigation Item</a></li>
+    <li><a href="#">Navigation Item</a></li>
+    <li><a href="#">Navigation Item</a></li>
+  </ul>
+</div>
+<h3 class="accordion" id="nav-section2">Navigation Section<span></span><h3>
+<div>
+    <ul>
+    <li><a href="#">Navigation Item</a></li>
+    <li><a href="#">Navigation Item</a></li>
+    <li><a href="#">Navigation Item</a></li>
+    <li><a href="#">Navigation Item</a></li>
+    <li><a href="#">Navigation Item</a></li>
+    <li><a href="#">Navigation Item</a></li>
+  </ul>
+</div>
+<h3 class="accordion" id="nav-section3">Navigation Section<span></span><h3>
+<div>
+    <ul>
+    <li><a href="#">Navigation Item</a></li>
+    <li><a href="#">Navigation Item</a></li>
+    <li><a href="#">Navigation Item</a></li>
+    <li><a href="#">Navigation Item</a></li>
+    <li><a href="#">Navigation Item</a></li>
+    <li><a href="#">Navigation Item</a></li>
+  </ul>
+</div>
+---end HTML code----------------------------------------------------------------
+________________________________________________________________________________
+================================================================================
+
+
+Adding the Javascript to your file:
+================================================================================
+
+JavaScript which belongs in the head of the html document, using the cookie 
+plugin is optional.  Please note that our default open / config is only an 
+example.
+
+---JavaScript code--------------------------------------------------------------
+<script type="text/javascript" src="javascript/jquery.cookie.js"></script>
+<script type="text/javascript" src="javascript/jquery.collapsible.js"></script>
+<script type="text/javascript">
+  $(document).ready(function() {
+    $('.accordion').accordion({
+        defaultOpen: 'section1',
+        cookieName: 'accordion_nav'
+    });
+  });
+</script>
+---end JavaScript code----------------------------------------------------------
+
+The plugin default options are as follows:
+---JavaScript code--------------------------------------------------------------
+{
+    cssClose: 'accordion-close', //class you want to assign to a closed accordion header
+    cssOpen: 'accordion-open', //class you want to assign an opened accordion header
+    cookieName: 'accordion', //name of the cookie you want to set for this accordion
+    cookieOptions: { //cookie options, see cookie plugin for details
+      path: '/',
+      expires: 7,
+      domain: '',
+      secure: ''
+    },
+    defaultOpen: '', //id that you want opened by default
+    speed: 'slow', //speed of the slide effect
+    bind: 'click', //event to bind to, supports click, dblclick, mouseover and mouseenter
+    animateOpen: function (elem, opts) { //replace the standard slideDown with custom function
+      elem.next().slideDown(opts.speed);
+    },
+    animateClose: function (elem, opts) { //replace the standard slideUp with custom function
+      elem.next().slideUp(opts.speed);
+    }
+}
+---end JavaScript code----------------------------------------------------------
+
+Option details:
+
+* cssClose - class assigned when closed
+* cssOpen - class assigned when opened
+* cookieName - cookie name for persisting panels
+* cookieOptions - see jquery.cookie plugin for more info
+* defaultOpen - id that you want opened by default
+* speed - animation speed
+* bind - event that triggers the collapsible, only 
+  4 are supported:<br /> click, dblclick, mouseenter, and mouseover
+* animateOpen - custom callback to animate opening
+* animateClose - custom callback to animate closing
+
+________________________________________________________________________________
+================================================================================
+
+
+Styling 
+================================================================================
+
+In the above example HTML you will see a span, this is useful if you wish to 
+assign an open/close image.
+
+This plugin will append a user defined (or default, see options above) class to 
+header of the accordion.  You can use this to swap out the images or style the 
+different states of your accordion.
+
+---CSS code---------------------------------------------------------------------
+.accordion h3.collapse-open {}
+.accordion h3.collapse-close {}
+.accordion h3.collapse-open span {}
+.accordion h3.collapse-close span {}
+---end CSS code-----------------------------------------------------------------
+
+________________________________________________________________________________
+================================================================================
