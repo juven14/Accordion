@@ -9,11 +9,19 @@
  */
 (function($) {
     $.fn.accordion = function(options) {
+
+        //firewalling
+        if (!this || this.length < 1) {
+            return this;
+        }
+
         initialize(this, options);
+
     };
 
     //create the initial accordion
     function initialize(obj, options) {
+
         //build main options before element iteration
         var opts = $.extend({}, $.fn.accordion.defaults, options);
 
@@ -61,15 +69,15 @@
             //get the id for this element
             id = $this.attr('id');
 
-            //if not using cookies, open defauls
+            //if not using cookies, open defaults
             if (!useCookies(opts)) {
                 //close it if not defaulted to open
                 if (id != opts.defaultOpen) {
                     $this.addClass(opts.cssClose);
-                    $this.next().hide();
+                    opts.loadClose($this, opts);
                 } else { //its a default open, open it
                     $this.addClass(opts.cssOpen);
-                    $this.next().show();
+                    opts.loadOpen($this, opts);
                     opened = id;
                 }
             } else { //can use cookies, use them now
@@ -77,19 +85,19 @@
                 if (issetCookie(opts)) {
                     if (inCookie(id, opts) === false) {
                         $this.addClass(opts.cssClose);
-                        $this.next().hide();
+                        opts.loadClose($this, opts);
                     } else {
                         $this.addClass(opts.cssOpen);
-                        $this.next().show();
+                        opts.loadOpen($this, opts);
                         opened = id;
                     }
                 } else { //a cookie hasn't been set open defaults
                     if (id != opts.defaultOpen) {
                         $this.addClass(opts.cssClose);
-                        $this.next().hide();
+                        opts.loadClose($this, opts);
                     } else { //its a default open, open it
                         $this.addClass(opts.cssOpen);
-                        $this.next().show();
+                        opts.loadOpen($this, opts);
                         opened = id;
                     }
                 }
@@ -240,10 +248,16 @@
         speed: 'slow', //speed of the slide effect
         bind: 'click', //event to bind to, supports click, dblclick, mouseover and mouseenter
         animateOpen: function (elem, opts) { //replace the standard slideDown with custom function
-            elem.next().slideDown(opts.speed);
+            elem.next().stop(true, true).slideDown(opts.speed);
         },
         animateClose: function (elem, opts) { //replace the standard slideUp with custom function
-            elem.next().slideUp(opts.speed);
+            elem.next().stop(true, true).slideUp(opts.speed);
+        },
+        loadOpen: function (elem, opts) { //replace the default open state with custom function
+            elem.next().show();
+        },
+        loadClose: function (elem, opts) { //replace the default close state with custom function
+            elem.next().hide();
         }
     };
 })(jQuery);
