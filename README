@@ -10,6 +10,9 @@ github project: http://github.com/juven14/Accordion
 
 Very Basic demos can be found here: 
 http://www.snyderplace.com/demos/accordion.html
+
+To enable cookie support you'll need the Cookie plugin here:
+https://github.com/carhartl/jquery-cookie
 ________________________________________________________________________________
 ================================================================================
 
