@@ -126,7 +126,6 @@
 
     //hides a accordion panel
     function close($this, opts) {
-        //opened = $(document).find('.' + opts.cssOpen);
         opened = $this.parent().find('.' + opt.cssOpen);
         $.each(opened, function() {
             //give the proper class to the linked element
