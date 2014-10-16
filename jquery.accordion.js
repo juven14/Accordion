@@ -248,16 +248,26 @@
         speed: 'slow', //speed of the slide effect
         bind: 'click', //event to bind to, supports click, dblclick, mouseover and mouseenter
         animateOpen: function (elem, opts) { //replace the standard slideDown with custom function
-            elem.next().stop(true, true).slideDown(opts.speed);
+            var afterSlide = null;
+            if (opts.scrollToOpened) {
+                afterSlide = function() {
+                    $("body").animate({ scrollTop: elem.offset().top }, opts.scrollSpeed);
+                };
+            };
+            elem.next().stop(true, true).slideDown(opts.speed, afterSlide);
         },
         animateClose: function (elem, opts) { //replace the standard slideUp with custom function
             elem.next().stop(true, true).slideUp(opts.speed);
         },
         loadOpen: function (elem, opts) { //replace the default open state with custom function
             elem.next().show();
+            if (opts.scrollToOpened)
+                $("body").animate({ scrollTop: elem.offset().top }, opts.scrollSpeed);
         },
         loadClose: function (elem, opts) { //replace the default close state with custom function
             elem.next().hide();
-        }
+        },
+        scrollSpeed: 'slow',  // A string or number determining how long the scroll animation will run.
+        scrollToOpened: false // Flag specifying whether the document should scroll to the opened element
     };
 })(jQuery);
