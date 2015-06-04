@@ -125,8 +125,13 @@
     }
 
     //hides a accordion panel
-    function close(opts) {
-        opened = $(document).find('.' + opts.cssOpen);
+    function close($this, opts) {
+        if (opts.leaveOpen) {
+            opened = $this;
+        } else {
+            opened = $(document).find('.' + opts.cssOpen);
+        }
+
         $.each(opened, function() {
             //give the proper class to the linked element
             $(this).addClass(opts.cssClose).removeClass(opts.cssOpen);
@@ -136,7 +141,7 @@
 
     //opens a accordion panel
     function open($this, opts) {
-        close(opts);
+        close($this, opts);
         //give the proper class to the linked element
         $this.removeClass(opts.cssClose).addClass(opts.cssOpen);
 
@@ -156,7 +161,7 @@
         // close the only open item
         if ($this.hasClass(opts.cssOpen))
         {
-            close(opts);
+            close($this, opts);
             //do cookies if plugin available
             if (useCookies(opts)) {
                 // split the cookieOpen string by ","
@@ -164,7 +169,7 @@
             }
             return false;
         }
-        close(opts);
+        close($this, opts);
         //open a closed element
         open($this, opts);
         return false;
@@ -248,16 +253,27 @@
         speed: 'slow', //speed of the slide effect
         bind: 'click', //event to bind to, supports click, dblclick, mouseover and mouseenter
         animateOpen: function (elem, opts) { //replace the standard slideDown with custom function
-            elem.next().stop(true, true).slideDown(opts.speed);
+            var afterSlide = null;
+            if (opts.scrollToOpened) {
+                afterSlide = function() {
+                    $("body").animate({ scrollTop: elem.offset().top }, opts.scrollSpeed);
+                };
+            };
+            elem.next().stop(true, true).slideDown(opts.speed, afterSlide);
         },
         animateClose: function (elem, opts) { //replace the standard slideUp with custom function
             elem.next().stop(true, true).slideUp(opts.speed);
         },
         loadOpen: function (elem, opts) { //replace the default open state with custom function
             elem.next().show();
+            if (opts.scrollToOpened)
+                $("body").animate({ scrollTop: elem.offset().top }, opts.scrollSpeed);
         },
         loadClose: function (elem, opts) { //replace the default close state with custom function
             elem.next().hide();
-        }
+        },
+        scrollSpeed: 'slow',  // A string or number determining how long the scroll animation will run.
+        scrollToOpened: false, // Flag specifying whether the document should scroll to the opened element
+        leaveOpen: false, // A flag specifying whether open accordions should be left opened when one is closed
     };
 })(jQuery);
