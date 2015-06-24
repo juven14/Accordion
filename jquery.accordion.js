@@ -125,8 +125,8 @@
     }
 
     //hides a accordion panel
-    function close(opts) {
-        opened = $(document).find('.' + opts.cssOpen);
+    function close($this, opts) {
+        opened = $this.parent().find('.' + opt.cssOpen);
         $.each(opened, function() {
             //give the proper class to the linked element
             $(this).addClass(opts.cssClose).removeClass(opts.cssOpen);
@@ -136,7 +136,7 @@
 
     //opens a accordion panel
     function open($this, opts) {
-        close(opts);
+        close($this, opts);
         //give the proper class to the linked element
         $this.removeClass(opts.cssClose).addClass(opts.cssOpen);
 
@@ -156,7 +156,7 @@
         // close the only open item
         if ($this.hasClass(opts.cssOpen))
         {
-            close(opts);
+            close($this, opts);
             //do cookies if plugin available
             if (useCookies(opts)) {
                 // split the cookieOpen string by ","
@@ -164,7 +164,7 @@
             }
             return false;
         }
-        close(opts);
+        close($this, opts);
         //open a closed element
         open($this, opts);
         return false;
